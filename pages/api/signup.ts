@@ -8,6 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const salt = bcrypt.genSaltSync();
 	const { email, password } = req.body;
 
+	if (!email || !password) {
+		res.status(401);
+		res.json({ error: "Both email and password are required" });
+		return;
+	}
+
 	let user;
 	try {
 		user = await prisma.user.create({
